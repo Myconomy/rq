@@ -117,7 +117,6 @@ class Worker(object):
             queues = [queues]
         self._name = name
         self.queues = queues
-        self.validate_queues()
         self._exc_handlers = []
 
         if default_result_ttl is None:
@@ -145,14 +144,6 @@ class Worker(object):
             if isinstance(job_class, string_types):
                 job_class = import_attribute(job_class)
             self.job_class = job_class
-
-    def validate_queues(self):
-        """Sanity check for the given queues."""
-        if not iterable(self.queues):
-            raise ValueError('Argument queues not iterable.')
-        for queue in self.queues:
-            if not isinstance(queue, self.queue_class):
-                raise NoQueueError('Give each worker at least one Queue.')
 
     def queue_names(self):
         """Returns the queue names of this worker's queues."""
